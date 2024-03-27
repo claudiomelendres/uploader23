@@ -23,18 +23,11 @@ export class UploadController {
     @Post()
     @UseInterceptors(FileInterceptor('file', {
         fileFilter: fileFilter,
-        limits: { fileSize: 1000000 },
+        limits: { fileSize: 20000000 },
 
 
     }))
-    async UploadedFile(@UploadedFile(
-        // new ParseFilePipe({
-        //     validators: [
-        //         // new MaxFileSizeValidator({ maxSize: 1000000 }),
-        //         // new FileTypeValidator({ fileType: 'image/jpeg, image/png' })
-        //     ]
-        // })
-    ) file: Express.Multer.File) {
+    async UploadedFile(@UploadedFile() file: Express.Multer.File) {
         if (!file) throw new BadRequestException('Make sure that the file is an image');
         console.log(file);
         await this.uploadService.upload(file.originalname, file.buffer);
